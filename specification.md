@@ -25,12 +25,63 @@ Qualtrics内で実行された場合（IFrame内での動作を検知した場�
 本課題ではQualtricsの容量制限（約20KB）を回避するため、全データではなく、**本命のSVO選択試行（`task: 'svo'`）のデータのみを自動的に抽出して送信**する仕様になっています。そのため、分析時に空白画面などのダミーデータを手動でフィルタリング・除外する必要はありません。
 
 **Qualtrics側の設定手順:**
-1. Qualtricsのアンケートフローで、「埋め込みデータ (Embedded Data)」ブロックを追加し、`SVO_DATA` という変数を設定します。
-2. 質問のHTMLビューに以下のようなiframeタグを追加し、この課題を読み込ませます。
-   ```html
-   <iframe src="https://[あなたのGitHubアカウント].github.io/SSM/experiment.html" width="100%" height="800px" style="border:none;"></iframe>
+
+本プログラムはJavaScriptで動的にIFrame（全画面）を生成するため、質問文のHTMLビューへのタグ貼り付けは**不要**です。以下の手順で設定してください。
+
+1. **アンケートフローの設定（前半）**
+   課題ブロックより**前**に「埋め込みデータ」を追加し、変数名を **`__js_datajs`** に設定します。（※ `__` はアンダーバー2つです。Qualtricsの仕様により、JSから保存する変数にはこの接頭辞が必須となります）
+
+2. **JavaScriptの追加**
+   課題を実施する質問の「JavaScriptを追加」を開き、以下のコードを貼り付けてください（`task_url` と `event.origin` のURLはご自身のGitHubのアカウント名に合わせて変更してください）。
+
+   ```javascript
+   Qualtrics.SurveyEngine.addOnload(function () {
+       var qthis = this;
+       qthis.hideNextButton(); // 次へボタンを隠す
+   
+       // URLの指定（キャッシュ回避付き）
+       var nocache = "?nocache=" + new Date().getTime();
+       var task_url = "https://[あなたのGitHubアカウント].github.io/SSM/experiment.html" + nocache;
+   
+       // 全画面IFrameの生成
+       var iframe = document.createElement('iframe');
+       iframe.src = task_url;
+       iframe.allowFullscreen = true;
+       iframe.style.position = "fixed";
+       iframe.style.top = "0";
+       iframe.style.left = "0";
+       iframe.style.width = "100vw";
+       iframe.style.height = "100vh";
+       iframe.style.border = "none";
+       iframe.style.zIndex = "99999";
+       iframe.style.backgroundColor = "#f7f9fa";
+       document.body.appendChild(iframe);
+   
+       // データ受信処理
+       var messageListener = function(event) {
+           if (event.origin === "https://[あなたのGitHubアカウント].github.io") {
+               if (event.data && event.data.type === 'jspsych-data') {
+                   // データをQualtricsに保存（コード上は datajs と指定）
+                   Qualtrics.SurveyEngine.setJSEmbeddedData("datajs", event.data.data);
+                   
+                   if (document.body.contains(iframe)) {
+                       document.body.removeChild(iframe);
+                   }
+                   window.removeEventListener("message", messageListener);
+                   setTimeout(function () {
+                       qthis.clickNextButton();
+                   }, 500);
+               }
+           }
+       };
+       window.addEventListener("message", messageListener);
+   });
    ```
-3. Qualtrics側のJavaScriptに、iframeからのメッセージを受信して `SVO_DATA` に格納する処理（`window.addEventListener("message", ...)`）を記述します（既存のEEM_SD課題と同じスクリプトがそのまま使用できます）。
+
+3. **アンケートフローの設定（後半）**
+   ダウンロード時のデータ列の名前を綺麗にするため、フローの**一番最後**に再度「埋め込みデータ」を追加し、以下のようにコピー設定をします。
+   * 変数名: `datajs`
+   * 今すぐ値を設定: `${e://Field/__js_datajs}`
 
 ## 編集方法
 * 教示の文章を変更したい場合: `main.js` の `svo_instructions` 内の `html` 変数を修正してください。
