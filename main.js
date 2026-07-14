@@ -236,7 +236,8 @@ jsPsych.init({
     override_safe_mode: true, // ローカル環境(file://)でのテストエラーを回避
     timeline: timeline,
     on_finish: function () {
-        var datajs = jsPsych.data.get().json();
+        // Qualtricsの20KB制限を回避するため、本命のSVO回答データのみを抽出して送信する
+        var datajs = jsPsych.data.get().filter({task: 'svo'}).json();
 
         if (window.self !== window.top) {
             window.parent.postMessage({
