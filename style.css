@@ -1,0 +1,211 @@
+/* style.css */
+body {
+    background-color: #f7f9fa;
+    color: #333;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 本番・練習中にマウスカーソルを消すためのクラス */
+body.hide-cursor {
+    cursor: none !important;
+}
+
+.instructions {
+    text-align: left;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-size: 22px;
+    line-height: 1.8;
+}
+
+.instructions h2, .instructions-top h2, .instructions-bottom h2 {
+    text-align: left;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+/* 教示やクイズのテキストを自然なフローで配置する用 */
+.instructions-top {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    text-align: left;
+    font-size: 22px;
+    margin: 0 auto 20px auto;
+}
+
+/* 教示の補足テキストなどを自然なフローで配置する用 */
+.instructions-bottom {
+    position: relative !important;
+    width: 90% !important;
+    max-width: 1000px !important;
+    text-align: left !important;
+    font-size: 22px !important;
+    margin: 20px auto 40px auto !important;
+}
+
+/* 表を自然に中央揃えする */
+.centered-matrix-wrapper {
+    position: relative;
+    margin: 0 auto;
+    width: 960px;
+    height: 320px;
+}
+
+.payoff-matrix {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important; /* 2列の幅を完全に均等（480pxずつ）にする */
+    text-align: center !important;
+    background-color: white !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
+    border-radius: 12px !important;
+}
+
+.payoff-matrix th.top-header {
+    height: 70px !important;
+    background-color: #f1f3f5 !important;
+    font-size: 20px !important;
+    padding: 5px !important;
+    border: 2px solid #ccc !important;
+}
+
+.payoff-matrix td {
+    position: relative !important; /* 左側に飛び出すラベル用 */
+    height: 125px !important;
+    font-size: 32px !important;
+    font-weight: bold !important;
+    border: 2px solid #ccc !important;
+}
+
+/* 表の左に飛び出させる「相手の選択 パターン1/2」ラベル */
+.row-label {
+    position: absolute;
+    right: 100%; /* 左ボーダーのさらに外側へ */
+    margin-right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 24px;
+    color: #333;
+    pointer-events: none; /* マウスクリック等を阻害しないように */
+}
+
+.key-label {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #666;
+    margin-top: 5px;
+    box-shadow: 0 2px 0 #ccc;
+}
+
+/* 反応後のハイライト（自分の選択・列方向）は青系 */
+.payoff-matrix th.highlight-col, .payoff-matrix td.highlight-col {
+    background-color: #e7f1ff !important; 
+    border-color: #b8daff !important;
+}
+
+/* 相手の選択パターン説明時のハイライト（行方向）はオレンジ系 */
+.payoff-matrix th.highlight-row, .payoff-matrix td.highlight-row {
+    background-color: #ffe8d6 !important; 
+    border-color: #ffd8a8 !important;
+}
+
+/* 視覚多様性に配慮したカラーリング */
+.self-color {
+    color: #007bff; /* 青系（自分） */
+}
+
+.other-color {
+    color: #fd7e14; /* オレンジ系（相手） */
+}
+
+/* 注視点（＋）のスタイル。常に画面の完全中央 */
+.fixation-cross {
+    font-size: 60px;
+    font-weight: normal;
+    color: #333;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.matrix-caption {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 20px;
+    color: #555;
+    font-weight: bold;
+}
+
+/* jsPsych のボタングループ (自然な配置に変更) */
+#jspsych-html-button-response-btngroup {
+    margin-top: 40px;
+    text-align: center;
+}
+
+/* jsPsych のボタンを大きくし、クリック時に押し込まれるアニメーションを追加 */
+.custom-btn-visual {
+    display: inline-block;
+    font-size: 24px !important;
+    padding: 15px 30px !important;
+    margin: 10px 20px !important;
+    border-radius: 8px !important;
+    border: 1px solid transparent;
+    background-color: #fff;
+    border-color: #ccc;
+    cursor: pointer !important;
+    transition: transform 0.5s ease, box-shadow 0.5s ease, background-color 0.1s ease !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+
+.custom-btn-visual:active, .custom-btn-visual.pressed {
+    transform: scale(0.95);
+    background-color: #d4edda !important;
+    border-color: #28a745 !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+}
+
+
+/* jsPsych全体のベース文字サイズを大きくする */
+.jspsych-content {
+    font-size: 20px !important;
+}
+
+/* Responsive layout for instructions to prevent overlapping */
+.responsive-instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    gap: 30px;
+    width: 100%;
+    padding: 20px 0;
+}
+.responsive-instructions .instructions-top,
+.responsive-instructions .instructions-bottom {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 1000px !important;
+    margin: 0 !important;
+}
+.responsive-instructions .centered-matrix-wrapper {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+}
