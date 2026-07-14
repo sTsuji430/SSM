@@ -234,6 +234,7 @@ timeline.push({
 });
 
 jsPsych.init({
+    override_safe_mode: true, // ローカル環境(file://)でのテストエラーを回避
     timeline: timeline,
     on_finish: function () {
         var datajs = jsPsych.data.get().json();
