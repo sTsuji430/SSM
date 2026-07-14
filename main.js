@@ -1,7 +1,7 @@
 // =========================================================
 // SVO Standalone Version
 // =========================================================
-var repo_site = "https://stsuji430.github.io/SSM/";
+var repo_site = "./"; // ローカルでもGitHubでも動くように相対パスに設定
 
 var timeline = [];
 
@@ -11,8 +11,7 @@ var timeline = [];
 var preload_images = {
     type: 'preload',
     images: [
-        repo_site + 'image/y_o.png',
-        repo_site + 'image/post_match.png'
+        repo_site + 'image/y_o.png'
     ],
     message: '<p>データを読み込んでいます...</p>',
     show_progress_bar: true
