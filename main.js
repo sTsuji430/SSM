@@ -1,7 +1,7 @@
 // =========================================================
 // SVO Standalone Version
 // =========================================================
-var repo_site = "https://stsuji430.github.io/EEM_SD/";
+var repo_site = "https://stsuji430.github.io/SSM/";
 
 var timeline = [];
 
